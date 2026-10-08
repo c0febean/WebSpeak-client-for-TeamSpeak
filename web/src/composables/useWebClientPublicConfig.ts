@@ -36,7 +36,7 @@ export function useWebClientPublicConfig({
   const serverConfigLoading = ref(true);
   const welcomeTexts = reactive<Record<Language, string>>({ zh: "", en: "", de: "", ru: "", ja: "" });
   const accelerationAvailable = computed(() => accelerationRelays.value.length > 0);
-  const localizedWelcomeText = computed(() => welcomeTexts[language.value] || t("joinDescription"));
+  const localizedWelcomeText = computed(() => welcomeTexts[language.value] || t("browserVoiceLead"));
 
   async function loadPublicConfig(): Promise<void> {
     const query = new URLSearchParams(location.search);

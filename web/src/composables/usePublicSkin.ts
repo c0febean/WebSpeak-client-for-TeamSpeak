@@ -74,7 +74,10 @@ export function usePublicSkin(options: PublicSkinOptions = {}) {
       }
       // Only an explicit user choice overrides the instance default.
       const choice = readChoice();
-      await apply(choice && isPublicSkinEnabled(choice) ? choice : getPublicDefaultSkinId(), operation);
+      const defaultSkin = !choice && options.themeMode?.value === "dark"
+        ? BUILTIN_DARK_SKIN
+        : getPublicDefaultSkinId();
+      await apply(choice && isPublicSkinEnabled(choice) ? choice : defaultSkin, operation);
     } catch (error) { await recover(error, operation); }
     finally { if (owns(operation)) skinReady.value = true; operation.finish(); }
   }

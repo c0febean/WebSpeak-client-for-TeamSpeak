@@ -6,11 +6,11 @@ export type SiteLanguage = "zh" | "en" | "de" | "ru" | "ja";
  * with a blank welcome message.
  */
 export const DEFAULT_WELCOME_TEXTS: Record<SiteLanguage, string> = {
-  zh: "无需安装 TeamSpeak 客户端，打开浏览器即可加入语音频道。低延迟、轻量、专注于每一次对话。",
-  en: "No TeamSpeak client installation required. Open your browser and join a voice channel with low-latency audio built for conversation.",
-  de: "Keine Installation des TeamSpeak-Clients nötig. Öffne den Browser und tritt einem Sprachkanal bei – leichtgewichtig und mit geringer Latenz.",
-  ru: "Устанавливать клиент TeamSpeak не нужно: откройте браузер и присоединитесь к голосовому каналу. Низкая задержка и удобное общение в каждом разговоре.",
-  ja: "TeamSpeak クライアントのインストールは不要です。ブラウザを開くだけで音声チャンネルに参加できます。低遅延で軽快な会話を楽しめます。",
+  zh: "无需安装 TeamSpeak 客户端，打开浏览器即可加入语音频道。",
+  en: "No TeamSpeak client required. Open your browser to join a voice channel.",
+  de: "Kein TeamSpeak-Client nötig. Öffne den Browser und tritt einem Sprachkanal bei.",
+  ru: "Клиент TeamSpeak не нужен: откройте браузер и присоединитесь к голосовому каналу.",
+  ja: "TeamSpeak クライアントは不要です。ブラウザを開くだけで音声チャンネルに参加できます。",
 };
 
 export function resolveWelcomeTexts(values: Partial<Record<SiteLanguage, string>>): Record<SiteLanguage, string> {

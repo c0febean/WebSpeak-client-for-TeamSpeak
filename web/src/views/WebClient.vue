@@ -17,215 +17,53 @@
     <!-- Connection / welcome screen -->
     <section
       v-if="!voiceState.connected && !voiceState.reconnecting && !voiceState.reconnectFailed"
-      class="join-page"
+      class="join-page terminal-home-page"
       data-ws-part="home"
     >
-      <WebClientHeader
+      <TerminalHome
         v-model:language="language"
-        v-model:skin-id="activeSkinId"
-        :brand-name="skinHomeCopy.brandName || siteName"
+        v-model:server-host="serverHost"
+        v-model:server-port="serverPort"
+        v-model:server-password="serverPassword"
+        v-model:nickname="nickname"
+        v-model:channel="channel"
+        v-model:remember-identity="rememberIdentity"
+        v-model:acceleration-relay-id="accelerationRelayId"
+        :site-name="siteName"
         :app-version="appVersion"
-        :skin-options="skinOptions"
+        :dark-theme="isDarkTheme(themeMode)"
+        :skin-home-copy="skinHomeCopy"
+        :welcome-text="localizedWelcomeText"
+        :access-mode="accessMode"
+        :initialized="initialized"
+        :server-config-loading="serverConfigLoading"
+        :open-target-prefill-blocked="openTargetPrefillBlocked"
+        :acceleration-relays="accelerationRelays"
+        :favorite-servers="favoriteServers"
+        :recent-servers="recentServers"
+        :is-favorite="isFavorite"
+        :identity-export-busy="identityExportBusy"
+        :has-identity="Boolean(identityMaterial)"
+        :local-persistence-available="localPersistenceAvailable"
+        :visitor-number="visitorNumber"
+        :visitor-total="visitorTotal"
+        :connecting="voiceState.connecting"
+        :join-disabled="!canJoin || serverConfigLoading || !identityReady || voiceState.connecting"
+        :autofocus-nickname="!isMobileViewport"
+        :error-message="voiceState.error ? localizedMessage(voiceState.error) : ''"
+        :error-code="voiceState.errorCode ? visibleErrorCode(voiceState.errorCode) : ''"
+        :browser-error-message="browserError ? localizedMessage(browserError) : ''"
         :t="t"
-        @skin-change="onSkinChange"
+        @theme-toggle="toggleHomeTheme"
         @language-change="persistLanguage"
+        @connect="doConnect"
+        @disconnect="doDisconnect"
+        @select-server="selectLocalServer"
+        @toggle-favorite="toggleFavorite"
+        @import-identity="openIdentityImport"
+        @export-identity="exportIdentity"
+        @clear-local-data="clearBrowserData"
       />
-
-      <main
-        class="join-content"
-        data-ws-part="home.content"
-      >
-        <div
-          class="join-copy"
-          data-ws-part="home.hero"
-        >
-          <div
-            class="eyebrow"
-            data-ws-part="home.hero.eyebrow"
-            ><span class="eyebrow-dot"></span> {{ skinHomeCopy.eyebrow || t("privateAudio") }}</div
-          >
-          <h1 data-ws-part="home.hero.title"
-            >{{ skinHomeCopy.title || t("joinLine1") }}<br /><em>{{
-              skinHomeCopy.titleAccent || t("joinLine2")
-            }}</em></h1
-          >
-          <p
-            class="join-description"
-            data-ws-part="home.hero.description"
-            >{{ skinHomeCopy.description || localizedWelcomeText }}</p
-          >
-          <div
-            class="promise-list"
-            data-ws-part="home.features"
-          >
-            <div
-              v-for="feature in skinHomeFeatures"
-              :key="feature.id"
-              class="promise-item"
-              data-ws-part="home.feature"
-              :data-ws-feature-id="feature.id"
-              ><span :class="['promise-icon', feature.tone]"
-                ><Icon
-                  :name="feature.icon"
-                  :size="16" /></span
-              ><span
-                ><b>{{ feature.title }}</b
-                ><small>{{ feature.description }}</small></span
-              ></div
-            >
-          </div>
-          <div
-            v-if="visitorNumber !== null"
-            class="visitor-count"
-            data-ws-part="home.visitors"
-            role="status"
-            aria-live="polite"
-          >
-            <span
-              class="visitor-count-orbit"
-              aria-hidden="true"
-            ></span>
-            <span class="visitor-count-icon"
-              ><Icon
-                name="users"
-                :size="15"
-            /></span>
-            <span class="visitor-count-label">{{
-              t("visitorCount", { count: visitorNumber })
-            }}</span>
-            <span
-              v-if="visitorTotal !== null"
-              class="visitor-count-divider"
-              aria-hidden="true"
-            ></span>
-            <span
-              v-if="visitorTotal !== null"
-              class="visitor-count-total"
-              >{{ t("visitorTotal", { count: visitorTotal }) }}</span
-            >
-            <span
-              class="visitor-count-spark"
-              aria-hidden="true"
-              >✦</span
-            >
-          </div>
-        </div>
-
-        <div
-          class="join-card"
-          data-ws-part="home.join-card"
-        >
-          <div
-            class="join-card-effects"
-            aria-hidden="true"
-          >
-            <span
-              class="join-card-waveform"
-              data-ws-part="home.join-card.waveform"
-              ><i
-                v-for="bar in 9"
-                :key="bar"
-              ></i
-            ></span>
-            <span
-              class="join-card-sonar"
-              data-ws-part="home.join-card.sonar"
-              ><i
-                v-for="ring in 3"
-                :key="ring"
-              ></i
-            ></span>
-          </div>
-          <h2 data-ws-part="home.join-title">{{
-            skinHomeCopy.welcomeTitle || t("welcomeBack")
-          }}</h2>
-          <p
-            class="card-lead"
-            data-ws-part="home.join-description"
-            >{{ skinHomeCopy.welcomeDescription || t("joinLead") }}</p
-          >
-
-          <div
-            v-if="voiceState.error"
-            class="notice error-notice"
-            data-ws-part="home.notice"
-            data-ws-state="error"
-            ><span class="notice-symbol">!</span
-            ><span class="notice-content"
-              ><span>{{ localizedMessage(voiceState.error) }}</span
-              ><code v-if="voiceState.errorCode"
-                >{{ t("errorCode") }}: {{ visibleErrorCode(voiceState.errorCode) }}</code
-              ></span
-            ></div
-          >
-          <div
-            v-if="browserError"
-            class="notice warning-notice"
-            data-ws-part="home.notice"
-            data-ws-state="warning"
-            ><span class="notice-symbol">i</span
-            ><span>{{ localizedMessage(browserError) }}</span></div
-          >
-          <div
-            v-if="!serverConfigLoading && !initialized"
-            class="notice warning-notice"
-            data-ws-part="home.notice"
-            data-ws-state="unconfigured"
-            ><span class="notice-symbol">i</span
-            ><span
-              >{{ t("notConfigured") }} <a href="/admin">{{ t("configureNow") }}</a></span
-            ></div
-          >
-          <div
-            v-if="!localPersistenceAvailable"
-            class="notice warning-notice"
-            data-ws-part="home.notice"
-            data-ws-state="storage-warning"
-            ><span class="notice-symbol">i</span
-            ><span>{{ t("localPersistenceUnavailable") }}</span></div
-          >
-
-          <JoinForm
-            v-if="initialized"
-            :autofocus-nickname="!isMobileViewport"
-            v-model:server-host="serverHost"
-            v-model:server-port="serverPort"
-            v-model:server-password="serverPassword"
-            v-model:nickname="nickname"
-            v-model:channel="channel"
-            v-model:remember-identity="rememberIdentity"
-            v-model:acceleration-relay-id="accelerationRelayId"
-            :access-mode="accessMode"
-            :open-target-prefill-blocked="openTargetPrefillBlocked"
-            :acceleration-relays="accelerationRelays"
-            :favorite-servers="favoriteServers"
-            :recent-servers="recentServers"
-            :is-favorite="isFavorite"
-            :identity-export-busy="identityExportBusy"
-            :has-identity="Boolean(identityMaterial)"
-            :connecting="voiceState.connecting"
-            :join-disabled="
-              !canJoin || serverConfigLoading || !identityReady || voiceState.connecting
-            "
-            :t="t"
-            @connect="doConnect"
-            @disconnect="doDisconnect"
-            @select-server="selectLocalServer"
-            @toggle-favorite="toggleFavorite"
-            @import-identity="openIdentityImport"
-            @export-identity="exportIdentity"
-          />
-          <div
-            class="join-meta"
-            data-ws-part="home.security-note"
-            ><Icon
-              name="lock"
-              :size="14"
-            />
-            {{ t("connectionAuthorized") }}</div
-          >
-        </div>
-      </main>
 
       <IdentityImportDialog
         v-if="identityImportOpen"
@@ -238,22 +76,6 @@
         @submit="importIdentity"
         @file="readIdentityFile"
       />
-
-      <footer
-        class="join-footer"
-        data-ws-part="home.footer"
-      >
-        <span>WebSpeak</span><span class="footer-separator">·</span
-        ><span>{{ t("teamSpeakClient") }}</span
-        ><span class="footer-spacer"></span
-        ><button
-          type="button"
-          class="clear-local-button"
-          @click="clearBrowserData"
-          >{{ t("clearLocalData") }}</button
-        ><span class="footer-separator">·</span><span>{{ t("browserSupport") }}</span>
-      </footer>
-
     </section>
 
     <!-- Connected application shell -->
@@ -733,9 +555,8 @@ import ChannelPasswordDialog from "../components/web-client/ChannelPasswordDialo
 import ServerPasswordDialog from "../components/web-client/ServerPasswordDialog.vue";
 import ChannelMemberPanel from "../components/web-client/ChannelMemberPanel.vue";
 import MemberActionsMenu from "../components/web-client/MemberActionsMenu.vue";
-import JoinForm from "../components/web-client/JoinForm.vue";
+import TerminalHome from "../components/web-client/TerminalHome.vue";
 import ChatPanel from "../components/web-client/ChatPanel.vue";
-import WebClientHeader from "../components/web-client/WebClientHeader.vue";
 import IdentityImportDialog from "../components/web-client/IdentityImportDialog.vue";
 import { usePublicSkin } from "../composables/usePublicSkin.js";
 import { useWebClientIdentity } from "../composables/useWebClientIdentity.js";
@@ -757,7 +578,7 @@ import { clearLocalData as clearStoredLocalData, isLocalPersistenceAvailable, lo
 import type { InstalledSkin, SkinHomeCopy } from "../services/skin-pack.js";
 import { isPublicSkinEnabled } from "../services/skin-catalog.js";
 import { BUILTIN_DARK_SKIN, BUILTIN_LIGHT_SKIN } from "../services/skin-runtime.js";
-import { applyTheme, getStoredTheme, type ThemeMode } from "../services/theme.js";
+import { applyTheme, getStoredTheme, isDarkTheme, type ThemeMode } from "../services/theme.js";
 import { createScreenWakeLockController, getScreenWakeLockApi, type ScreenWakeLockController, type ScreenWakeLockSnapshot } from "../services/screen-wake-lock.js";
 import { createMobileAwayController, type MobileAwayController } from "../services/mobile-away.js";
 import { combineTeamSpeakTarget, DEFAULT_TEAM_SPEAK_PORT, splitTeamSpeakTarget } from "../services/teamspeak-target.js";
@@ -915,7 +736,18 @@ const {
   localizedWelcomeText,
   loadPublicConfig,
 } = useWebClientPublicConfig({ serverHost, serverPort, accelerationRelayId, language, t });
-const themeMode = ref<ThemeMode>(getStoredTheme());
+function getInitialTheme(): ThemeMode {
+  try {
+    if (localStorage.getItem("webspeak:theme") == null) {
+      localStorage.setItem("webspeak:theme", "dark");
+      return "dark";
+    }
+  } catch {
+    return "dark";
+  }
+  return getStoredTheme();
+}
+const themeMode = ref<ThemeMode>(getInitialTheme());
 applyTheme(themeMode.value);
 const publicSkin = usePublicSkin({ activeSkin, themeMode, appVersion: () => appVersion.value });
 const { activeSkinId, skinReady, installedSkins, catalogSkins, select: onSkinChange, initialize: initializeSkin } = publicSkin;
@@ -928,30 +760,12 @@ const skinOptions = computed<SkinOption[]>(() => [
   ...installedSkins.value.filter((skin) => !catalogSkins.value.some((item) => item.id === skin.id) && isPublicSkinEnabled(skin.id)).map((skin) => ({ value: skin.id, label: skin.name, icon: "compass" })),
 ]);
 const skinHomeCopy = computed<SkinHomeCopy>(() => resolveSkinHomeCopy(activeSkin.value, language.value));
-const skinHomeFeatures = computed(() => {
-  const defaults = [
-    { id: "quality", title: t("highQuality"), description: t("opusAudio"), icon: "waveform", tone: "" },
-    { id: "secure", title: t("secureJoin"), description: t("inviteProtected"), icon: "shield", tone: "mint" },
-    { id: "realtime", title: t("realtime"), description: t("membersSync"), icon: "users", tone: "sand" },
-  ];
-  const features = [...defaults];
-  const custom = skinHomeCopy.value.features ?? [];
-  const icons = ["waveform", "shield", "users"];
-  const tones = ["", "mint", "sand"];
-  custom.forEach((feature, index) => {
-    const base = defaults[index];
-    const replacement = {
-      id: base?.id ?? `custom-${index}`,
-      title: feature.title.trim() || base?.title || "",
-      description: feature.description.trim() || base?.description || "",
-      icon: base?.icon ?? icons[index % icons.length],
-      tone: base?.tone ?? tones[index % tones.length],
-    };
-    if (base) features[index] = replacement;
-    else if (replacement.title && replacement.description) features.push(replacement);
-  });
-  return features;
-});
+
+function toggleHomeTheme(): void {
+  const nextSkin = isDarkTheme(themeMode.value) ? BUILTIN_LIGHT_SKIN : BUILTIN_DARK_SKIN;
+  void onSkinChange(nextSkin);
+}
+
 const audioControls = useWebClientAudioControls({
   settingsOpen,
   microphoneMuted,

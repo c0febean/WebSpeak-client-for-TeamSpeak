@@ -8,18 +8,52 @@
 
     <main
       v-else-if="screen === 'change-password'"
-      class="login-page"
+      class="login-page auth-terminal"
+      :data-auth-state="authTerminalState"
     >
-      <section class="login-card">
-        <div class="admin-brand centered"
-          ><span
-            ><Icon
-              name="waveform"
-              :size="24" /></span
-          ><div
-            ><strong>WebSpeak</strong><small>{{ tr("adminConsole") }}</small></div
-          ></div
-        >
+      <div
+        class="auth-terminal-ambient"
+        aria-hidden="true"
+      ></div>
+      <div class="auth-terminal-header">
+        <WebClientHeader
+          v-model:language="language"
+          brand-name="WebSpeak"
+          :dark-theme="darkTheme"
+          :t="publicTr"
+          @theme-toggle="cycleTheme"
+          @language-change="persistLanguage"
+        />
+      </div>
+      <div class="auth-terminal-corner auth-terminal-corner-tl">
+        <span class="auth-terminal-dot" aria-hidden="true"></span>
+        WEBSPEAK // ADMIN_GATEWAY
+      </div>
+      <div class="auth-terminal-corner auth-terminal-corner-tr">STATUS: {{ authTerminalCode }} // ACCESS: RESTRICTED</div>
+      <div class="auth-terminal-corner auth-terminal-corner-bl">
+        <span>SYS_LOG: {{ authTerminalCode }}</span>
+        <span class="auth-terminal-cursor" aria-hidden="true"></span>
+      </div>
+      <div class="auth-terminal-corner auth-terminal-corner-br">AUTH_MODE: PASSWORD_ROTATION</div>
+      <div class="auth-terminal-layout">
+        <aside class="auth-terminal-context">
+          <div class="auth-context-kicker"><span class="auth-context-dot" aria-hidden="true"></span>ADMIN / CONTROL PLANE</div>
+          <div class="auth-context-brand"
+            ><span><Icon name="waveform" :size="21" /></span
+            ><div><strong>WebSpeak</strong><small>{{ tr("adminConsole") }}</small></div
+          ></div>
+          <div class="auth-context-copy">
+            <span class="auth-context-label">PASSWORD_ROTATION</span>
+            <h2>{{ tr("adminConsole") }}</h2>
+            <p>{{ tr("changePasswordLead") }}</p>
+          </div>
+          <div class="auth-context-readouts">
+            <div><span>AUTH_STATE</span><strong>{{ authTerminalCode }}</strong></div>
+            <div><span>ACCESS</span><strong>RESTRICTED</strong></div>
+          </div>
+        </aside>
+        <section class="login-card">
+          <div class="auth-card-topline"><span>AUTH / PASSWORD_ROTATION</span><span>{{ authTerminalCode }}</span></div>
         <header
           ><h1>{{ tr("changePasswordTitle") }}</h1
           ><p>{{ tr("changePasswordLead") }}</p></header
@@ -57,30 +91,73 @@
             >{{ tr("savePassword") }}</button
           ></form
         >
-        <p class="security-note">{{ tr("defaultCredentialNotice") }}</p
-        ><LanguageSwitcher
-          v-model="language"
-          class="language-link"
-          :menu-label="tr('languageMenu')"
-          @change="persistLanguage"
-        />
-      </section>
+        <p class="security-note">{{ tr("defaultCredentialNotice") }}</p>
+        </section>
+      </div>
+      <footer class="auth-terminal-footer">
+        <div class="auth-terminal-footer-left">
+          <span>WEBSPEAK // ADMIN_GATEWAY</span>
+          <span class="auth-terminal-footer-separator" aria-hidden="true">·</span>
+          <span>{{ publicTr("browserWorkspace") }}</span>
+          <span class="auth-terminal-footer-separator" aria-hidden="true">·</span>
+          <span class="auth-terminal-footer-accent">ACCESS: RESTRICTED</span>
+        </div>
+        <div class="auth-terminal-footer-right">
+          <span>AUTH_STATE: {{ authTerminalCode }}</span>
+          <span class="auth-terminal-footer-separator" aria-hidden="true">·</span>
+          <span>CONTROL PLANE ONLINE</span>
+        </div>
+      </footer>
     </main>
 
     <main
       v-else-if="screen === 'login'"
-      class="login-page"
+      class="login-page auth-terminal"
+      :data-auth-state="authTerminalState"
     >
-      <section class="login-card">
-        <div class="admin-brand centered"
-          ><span
-            ><Icon
-              name="waveform"
-              :size="24" /></span
-          ><div
-            ><strong>WebSpeak</strong><small>{{ tr("adminConsole") }}</small></div
-          ></div
-        >
+      <div
+        class="auth-terminal-ambient"
+        aria-hidden="true"
+      ></div>
+      <div class="auth-terminal-header">
+        <WebClientHeader
+          v-model:language="language"
+          brand-name="WebSpeak"
+          :dark-theme="darkTheme"
+          :t="publicTr"
+          @theme-toggle="cycleTheme"
+          @language-change="persistLanguage"
+        />
+      </div>
+      <div class="auth-terminal-corner auth-terminal-corner-tl">
+        <span class="auth-terminal-dot" aria-hidden="true"></span>
+        WEBSPEAK // ADMIN_GATEWAY
+      </div>
+      <div class="auth-terminal-corner auth-terminal-corner-tr">STATUS: {{ authTerminalCode }} // ACCESS: RESTRICTED</div>
+      <div class="auth-terminal-corner auth-terminal-corner-bl">
+        <span>SYS_LOG: {{ authTerminalCode }}</span>
+        <span class="auth-terminal-cursor" aria-hidden="true"></span>
+      </div>
+      <div class="auth-terminal-corner auth-terminal-corner-br">AUTH_MODE: LOGIN</div>
+      <div class="auth-terminal-layout">
+        <aside class="auth-terminal-context">
+          <div class="auth-context-kicker"><span class="auth-context-dot" aria-hidden="true"></span>ADMIN / CONTROL PLANE</div>
+          <div class="auth-context-brand"
+            ><span><Icon name="waveform" :size="21" /></span
+            ><div><strong>WebSpeak</strong><small>{{ tr("adminConsole") }}</small></div
+          ></div>
+          <div class="auth-context-copy">
+            <span class="auth-context-label">SECURE_LOGIN</span>
+            <h2>{{ tr("adminConsole") }}</h2>
+            <p>{{ tr("loginLead") }}</p>
+          </div>
+          <div class="auth-context-readouts">
+            <div><span>AUTH_STATE</span><strong>{{ authTerminalCode }}</strong></div>
+            <div><span>ACCESS</span><strong>RESTRICTED</strong></div>
+          </div>
+        </aside>
+        <section class="login-card">
+          <div class="auth-card-topline"><span>AUTH / SECURE_LOGIN</span><span>{{ authTerminalCode }}</span></div>
         <header
           ><h1>{{ tr("welcomeAdmin") }}</h1
           ><p>{{ tr("loginLead") }}</p></header
@@ -121,13 +198,23 @@
               name="home"
               :size="15"
             />{{ tr("backHome") }}</RouterLink
-          ><LanguageSwitcher
-            v-model="language"
-            class="language-link"
-            :menu-label="tr('languageMenu')"
-            @change="persistLanguage"
         /></div>
-      </section>
+        </section>
+      </div>
+      <footer class="auth-terminal-footer">
+        <div class="auth-terminal-footer-left">
+          <span>WEBSPEAK // ADMIN_GATEWAY</span>
+          <span class="auth-terminal-footer-separator" aria-hidden="true">·</span>
+          <span>{{ publicTr("browserWorkspace") }}</span>
+          <span class="auth-terminal-footer-separator" aria-hidden="true">·</span>
+          <span class="auth-terminal-footer-accent">ACCESS: RESTRICTED</span>
+        </div>
+        <div class="auth-terminal-footer-right">
+          <span>AUTH_STATE: {{ authTerminalCode }}</span>
+          <span class="auth-terminal-footer-separator" aria-hidden="true">·</span>
+          <span>CONTROL PLANE ONLINE</span>
+        </div>
+      </footer>
     </main>
 
     <div
@@ -221,14 +308,19 @@
               class="theme-toggle"
               :title="themeLabel"
               :aria-label="themeLabel"
+              :aria-pressed="darkTheme"
               @click="cycleTheme"
-              ><Icon
-                :name="themeIcon"
-                :size="17"
-              /><span>{{ themeLabel }}</span></button
+              ><span
+                class="theme-toggle-track"
+                :class="{ dark: darkTheme }"
+                aria-hidden="true"
+              ><span class="theme-toggle-option theme-toggle-moon"><Icon name="moon" :size="12" /></span
+              ><span class="theme-toggle-option theme-toggle-sun"><Icon name="sun" :size="12" /></span
+              ><span class="theme-toggle-thumb"></span></span></button
             >
             <LanguageSwitcher
               v-model="language"
+              compact
               :menu-label="tr('languageMenu')"
               @change="persistLanguage"
             />
@@ -393,11 +485,13 @@ import Icon from "../components/Icon.vue";
 import AdminServerSettings from "../components/admin/AdminServerSettings.vue";
 import AdminOperations from "../components/admin/AdminOperations.vue";
 import AdminSkins from "../components/admin/AdminSkins.vue";
+import WebClientHeader from "../components/web-client/WebClientHeader.vue";
 import LanguageSwitcher from "../components/LanguageSwitcher.vue";
 import { createAdminRequests } from "../services/admin-requests.js";
 import { useAdminServerSettings } from "../composables/useAdminServerSettings.js";
 import { useAdminOperations } from "../composables/useAdminOperations.js";
 import { useAdminSkins } from "../composables/useAdminSkins.js";
+import { useWebClientI18n } from "../composables/useWebClientI18n.js";
 import type { SiteLanguage } from "../../../src/site-copy.js";
 import { applyTheme, getStoredTheme, isDarkTheme, nextTheme, saveTheme, type ThemeMode } from "../services/theme.js";
 
@@ -409,9 +503,21 @@ const storedLanguage = localStorage.getItem("webspeak:language");
 const language = ref<SiteLanguage>(storedLanguage === "en" || storedLanguage === "de" || storedLanguage === "ru" || storedLanguage === "ja" ? storedLanguage : typeof navigator !== "undefined" && navigator.language.toLowerCase().startsWith("ru") ? "ru" : typeof navigator !== "undefined" && navigator.language.toLowerCase().startsWith("ja") ? "ja" : "zh");
 const i18n = useAdminI18n(language);
 const { tr, formatDate, formatUptime, eventName, errorText } = i18n;
-const themeMode = ref<ThemeMode>(getStoredTheme());
-const themeIcon = computed(() => isDarkTheme(themeMode.value) ? "sun" : "moon");
-const themeLabel = computed(() => isDarkTheme(themeMode.value) ? tr("switchToLightTheme") : tr("switchToDarkTheme"));
+function getInitialTheme(): ThemeMode {
+  try {
+    if (localStorage.getItem("webspeak:theme") == null) {
+      localStorage.setItem("webspeak:theme", "dark");
+      return "dark";
+    }
+  } catch {
+    return "dark";
+  }
+  return getStoredTheme();
+}
+const themeMode = ref<ThemeMode>(getInitialTheme());
+const darkTheme = computed(() => isDarkTheme(themeMode.value));
+const themeLabel = computed(() => darkTheme.value ? tr("switchToLightTheme") : tr("switchToDarkTheme"));
+const { t: publicTr } = useWebClientI18n(language);
 applyTheme(themeMode.value);
 const loading = ref(true);
 const screen = ref<Screen>("login");
@@ -445,6 +551,14 @@ const adminSkins = useAdminSkins({ api: adminApi, tr });
 const { loadSkinCatalog } = adminSkins;
 
 const passwordStrength = computed(() => Math.min(100, Math.max(8, newPassword.value.length * 5 + (/[\s\W]/.test(newPassword.value) ? 15 : 0))));
+const authTerminalState = computed(() => {
+  if (loading.value) return "loading";
+  if (submitting.value) return screen.value === "change-password" ? "password-saving" : "authenticating";
+  if (errorMessage.value) return "auth-error";
+  if (screen.value === "change-password") return "password-rotation";
+  return "ready";
+});
+const authTerminalCode = computed(() => authTerminalState.value.toUpperCase());
 const currentPageTitle = computed(() => route.path === "/admin/server" ? tr('server') : route.path === "/admin/operations" ? tr('operations') : route.path === "/admin/skins" ? tr('skinLibrary') : tr('overview'));
 const targetStatusText = computed(() => overview.teamSpeak.status === "reachable" ? tr('reachable') : overview.teamSpeak.status === "unreachable" ? tr('unreachable') : tr('notTested'));
 const webrtcPortRangeText = computed(() => `${serverForm.webRtcUdpStart}–${serverForm.webRtcUdpEnd}`);

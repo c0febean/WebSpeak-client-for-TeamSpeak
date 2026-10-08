@@ -1,5 +1,5 @@
 <template>
-  <div ref="root" class="language-switcher" :class="{ open }" @keydown.esc="close">
+  <div ref="root" class="language-switcher" :class="{ open, compact }" @keydown.esc="close">
     <button
       type="button"
       class="language-trigger"
@@ -11,7 +11,6 @@
       :aria-controls="menuId"
       @click.stop="toggle"
     >
-      <span class="language-current-flag" aria-hidden="true">{{ currentLanguage.flag }}</span>
       <span class="language-current-code">{{ currentLanguage.code }}</span>
       <Icon name="chevron-down" :size="13" />
     </button>
@@ -31,7 +30,6 @@
         @keydown.enter.prevent="select(option.value)"
         @keydown.space.prevent="select(option.value)"
       >
-        <span class="language-option-flag" aria-hidden="true">{{ option.flag }}</span>
         <span class="language-option-copy">
           <strong>{{ option.label }}</strong>
           <small>{{ option.code }}</small>
@@ -51,8 +49,10 @@ type Language = "zh" | "en" | "de" | "ru" | "ja";
 const props = withDefaults(defineProps<{
   modelValue: Language;
   menuLabel?: string;
+  compact?: boolean;
 }>(), {
   menuLabel: "Language",
+  compact: false,
 });
 
 const emit = defineEmits<{
@@ -60,12 +60,12 @@ const emit = defineEmits<{
   change: [value: Language];
 }>();
 
-const options: Array<{ value: Language; code: string; label: string; flag: string }> = [
-  { value: "zh", code: "ZH", label: "中文", flag: "🇨🇳" },
-  { value: "en", code: "EN", label: "English", flag: "🇬🇧" },
-  { value: "de", code: "DE", label: "Deutsch", flag: "🇩🇪" },
-  { value: "ru", code: "RU", label: "Русский", flag: "🇷🇺" },
-  { value: "ja", code: "JA", label: "日本語", flag: "🇯🇵" },
+const options: Array<{ value: Language; code: string; label: string }> = [
+  { value: "zh", code: "ZH", label: "中文" },
+  { value: "en", code: "EN", label: "English" },
+  { value: "de", code: "DE", label: "Deutsch" },
+  { value: "ru", code: "RU", label: "Русский" },
+  { value: "ja", code: "JA", label: "日本語" },
 ];
 
 const root = ref<HTMLElement | null>(null);
@@ -139,16 +139,6 @@ onUnmounted(() => document.removeEventListener("pointerdown", onDocumentPointerD
   transform: rotate(180deg);
 }
 
-.language-current-flag,
-.language-option-flag {
-  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
-  line-height: 1;
-}
-
-.language-current-flag {
-  font-size: 15px;
-}
-
 .language-current-code {
   letter-spacing: .02em;
 }
@@ -158,12 +148,12 @@ onUnmounted(() => document.removeEventListener("pointerdown", onDocumentPointerD
   top: calc(100% + 8px);
   right: 0;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   grid-auto-rows: minmax(38px, max-content);
   align-items: start;
   align-content: start;
   gap: 3px;
-  width: min(360px, calc(100vw - 16px));
+  width: min(220px, calc(100vw - 16px));
   height: auto;
   max-height: none;
   padding: 7px;
@@ -201,11 +191,6 @@ onUnmounted(() => document.removeEventListener("pointerdown", onDocumentPointerD
   border-color: #d4eee8;
 }
 
-.language-option-flag {
-  flex: 0 0 auto;
-  font-size: 17px;
-}
-
 .language-option-copy {
   display: flex;
   align-items: baseline;
@@ -236,6 +221,40 @@ onUnmounted(() => document.removeEventListener("pointerdown", onDocumentPointerD
 
 .language-option > .ui-icon {
   flex: 0 0 auto;
+}
+
+.language-switcher.compact .language-trigger {
+  min-width: 0;
+  min-height: 24px;
+  padding: 2px 0;
+  color: inherit;
+  background: transparent;
+  border-color: transparent;
+  border-radius: 4px;
+  box-shadow: none;
+  font-size: 10px;
+  letter-spacing: .08em;
+}
+
+.language-switcher.compact .language-trigger:hover,
+.language-switcher.compact.open .language-trigger {
+  color: var(--terminal-accent, #006a64);
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.language-switcher.compact .language-dropdown {
+  top: calc(100% + 6px);
+  width: min(178px, calc(100vw - 16px));
+  padding: 5px;
+  border-radius: 9px;
+}
+
+.language-switcher.compact .language-option {
+  min-height: 32px;
+  padding: 5px 7px;
+  border-radius: 6px;
 }
 
 @keyframes language-menu-in {
@@ -290,7 +309,7 @@ onUnmounted(() => document.removeEventListener("pointerdown", onDocumentPointerD
   }
 
   .language-dropdown {
-    width: min(360px, calc(100vw - 16px));
+    width: min(220px, calc(100vw - 16px));
   }
 }
 </style>

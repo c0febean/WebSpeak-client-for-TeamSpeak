@@ -7387,3 +7387,74 @@
     gap: 6px;
   }
 }
+
+/* Terminal home overrides must remain after the legacy welcome-page rules. */
+.join-page.terminal-home-page {
+  width: 100%;
+  height: calc(100dvh / var(--ui-scale));
+  min-height: 0;
+  max-height: calc(100dvh / var(--ui-scale));
+  overflow: hidden;
+  background: #0b0c0e;
+}
+
+.join-page.terminal-home-page > .terminal-home {
+  width: 100%;
+  min-height: 0;
+}
+
+@media (max-width: 740px) {
+  .join-page.terminal-home-page {
+    height: 100%;
+    max-height: 100%;
+    overflow: hidden;
+  }
+
+  .join-page.terminal-home-page > .terminal-home {
+    flex: 1 1 0;
+    min-height: 0;
+  }
+}
+
+.join-page.terminal-home-page :deep(.join-header) {
+  width: 100%;
+  min-height: 34px;
+  margin: 0;
+  padding: 0;
+}
+
+.join-page.terminal-home-page :deep(.header-tools) {
+  display: flex !important;
+}
+
+@media (max-width: 740px) {
+  .join-page.terminal-home-page :deep(.join-header) {
+    min-height: 34px;
+    padding: 0;
+  }
+
+  .join-page.terminal-home-page :deep(.header-tools) {
+    flex: 0 0 auto;
+    width: auto;
+    max-width: 100%;
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+
+  .join-page.terminal-home-page :deep(.brand-lockup) {
+    flex: 1 1 auto;
+    min-width: 0;
+    gap: 7px;
+  }
+
+  .join-page.terminal-home-page :deep(.brand-lockup > div) {
+    display: flex;
+    min-width: 0;
+    align-items: baseline;
+    gap: 5px;
+  }
+
+  .join-page.terminal-home-page :deep(.brand-lockup small) {
+    display: inline;
+  }
+}

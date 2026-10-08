@@ -3741,3 +3741,1191 @@
     grid-template-columns: minmax(0,1fr);
   }
 }
+
+/* Terminal authentication surface. This is deliberately limited to the
+   login and password-rotation screens; the authenticated admin console keeps
+   its existing layout and theme controls. */
+.admin-root .login-page.auth-terminal {
+  position: relative;
+  display: grid;
+  min-height: 100dvh;
+  height: 100dvh;
+  overflow: hidden;
+  padding: 28px 48px;
+  color: #f4f4f5;
+  background: #0b0c0e;
+  isolation: isolate;
+  color-scheme: dark;
+}
+
+.admin-root .auth-terminal-ambient {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, .035), transparent 58%),
+    linear-gradient(135deg, transparent 0 49.8%, rgba(255, 255, 255, .018) 50%, transparent 50.2%);
+  background-size: auto, 88px 88px;
+}
+
+.admin-root .auth-terminal-ambient::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(45, 212, 191, .018), transparent);
+  content: "";
+}
+
+.admin-root .auth-terminal-corner {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: rgba(244, 244, 245, .28);
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 10px;
+  letter-spacing: .06em;
+  line-height: 1.4;
+  pointer-events: none;
+  user-select: none;
+}
+
+.admin-root .auth-terminal-corner-tl { top: 76px; left: 48px; }
+.admin-root .auth-terminal-corner-tr { top: 76px; right: 48px; }
+.admin-root .auth-terminal-corner-bl { bottom: 72px; left: 48px; }
+.admin-root .auth-terminal-corner-br { right: 48px; bottom: 72px; }
+
+.admin-root .auth-terminal-dot {
+  width: 5px;
+  height: 5px;
+  flex: 0 0 5px;
+  border-radius: 50%;
+  background: #2dd4bf;
+  box-shadow: 0 0 8px #2dd4bf;
+}
+
+.admin-root .auth-terminal-cursor {
+  width: 5px;
+  height: 11px;
+  background: #2dd4bf;
+  animation: auth-terminal-cursor-blink 1s steps(1, end) infinite;
+}
+
+.admin-root .login-page.auth-terminal .login-card {
+  position: relative;
+  z-index: 2;
+  width: min(430px, 100%);
+  max-width: 430px;
+  max-height: calc(100dvh - 56px);
+  overflow-y: auto;
+  padding: 30px;
+  color: #f4f4f5;
+  text-align: left;
+  background: #141619;
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: 12px;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, .52);
+}
+
+.admin-root .auth-terminal .admin-brand.centered {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.admin-root .auth-terminal .admin-brand.centered > span {
+  display: none;
+}
+
+.admin-root .auth-terminal .admin-brand strong {
+  color: #f4f4f5;
+  font-size: 14px;
+  letter-spacing: -.02em;
+}
+
+.admin-root .auth-terminal .admin-brand small {
+  display: inline;
+  margin: 0 0 0 8px;
+  color: #71717a;
+  font-size: 10px;
+  letter-spacing: .02em;
+}
+
+.admin-root .auth-terminal .login-card header {
+  margin: 30px 0 24px;
+  text-align: left;
+}
+
+.admin-root .auth-terminal .login-card h1 {
+  margin: 0 0 7px;
+  color: #f4f4f5;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -.035em;
+  line-height: 1.18;
+}
+
+.admin-root .auth-terminal .login-card header p {
+  margin: 0;
+  color: #71717a;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.admin-root .auth-terminal .login-card form {
+  display: grid;
+  gap: 15px;
+  margin-top: 0;
+}
+
+.admin-root .auth-terminal .login-card label > span {
+  display: block;
+  margin-bottom: 7px;
+  color: #a1a1aa;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.admin-root .auth-terminal .login-card input {
+  width: 100%;
+  height: 42px;
+  padding: 10px 12px;
+  color: #f4f4f5;
+  background: rgba(0, 0, 0, .22);
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: 8px;
+  outline: 0;
+  font-size: 13px;
+}
+
+.admin-root .auth-terminal .login-card input::placeholder {
+  color: #71717a;
+}
+
+.admin-root .auth-terminal .login-card input:focus {
+  border-color: rgba(45, 212, 191, .46);
+  box-shadow: 0 0 0 3px rgba(45, 212, 191, .12);
+}
+
+.admin-root .auth-terminal .login-card .alert.error {
+  margin: 0;
+  padding: 10px 11px;
+  color: #f87171;
+  background: rgba(127, 29, 29, .16);
+  border: 1px solid rgba(239, 68, 68, .28);
+  border-radius: 8px;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.admin-root .auth-terminal .login-card .primary-button {
+  min-height: 42px;
+  margin-top: 2px;
+  color: #0b0c0e;
+  background: #f4f4f5;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.admin-root .auth-terminal .login-card .primary-button:hover:not(:disabled) {
+  background: #fff;
+}
+
+.admin-root .auth-terminal .login-card .primary-button:disabled {
+  color: #71717a;
+  background: #d4d4d8;
+}
+
+.admin-root .auth-terminal .login-card .spinner.small {
+  width: 14px;
+  height: 14px;
+  border-color: rgba(11, 12, 14, .25);
+  border-top-color: #0b0c0e;
+}
+
+.admin-root .auth-terminal .security-note {
+  margin: 16px 0 0;
+  color: #71717a;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 9px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.admin-root .auth-terminal .login-actions {
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.admin-root .auth-terminal .home-link,
+.admin-root .auth-terminal .language-link {
+  color: #71717a;
+  background: transparent;
+  border-color: rgba(255, 255, 255, .08);
+  border-radius: 6px;
+  font-size: 10px;
+}
+
+.admin-root .auth-terminal .home-link:hover,
+.admin-root .auth-terminal .language-link:hover {
+  color: #f4f4f5;
+  background: #1c1f24;
+  border-color: rgba(45, 212, 191, .46);
+}
+
+.admin-root .auth-terminal .language-link {
+  padding: 7px 9px !important;
+  border: 1px solid rgba(255, 255, 255, .08) !important;
+}
+
+.admin-root .auth-terminal .strength {
+  height: 3px;
+  background: rgba(255, 255, 255, .08);
+}
+
+.admin-root .auth-terminal .strength i {
+  background: linear-gradient(90deg, #d8b66d, #2dd4bf);
+}
+
+@keyframes auth-terminal-cursor-blink {
+  0%, 45% { opacity: 1; }
+  46%, 100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-root .auth-terminal-cursor {
+    animation: none;
+  }
+}
+
+@media (max-width: 620px) {
+  .admin-root .login-page.auth-terminal {
+    min-height: 100dvh;
+    height: auto;
+    overflow: auto;
+    padding: calc(20px + env(safe-area-inset-top, 0px)) max(20px, env(safe-area-inset-right, 0px)) calc(20px + env(safe-area-inset-bottom, 0px)) max(20px, env(safe-area-inset-left, 0px));
+  }
+
+  .admin-root .auth-terminal-corner {
+    display: none;
+  }
+
+  .admin-root .login-page.auth-terminal .login-card {
+    max-height: none;
+    padding: 24px;
+  }
+
+  .admin-root .auth-terminal .login-card input {
+    height: 46px;
+    font-size: 16px;
+  }
+
+  .admin-root .auth-terminal .login-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .admin-root .auth-terminal .home-link,
+  .admin-root .auth-terminal .language-link {
+    justify-content: center;
+    min-height: 40px;
+  }
+}
+
+/* Second terminal-auth composition: the form is a quiet control surface on
+   the right, while the left side carries the system context. This keeps the
+   authentication screen from reading as a floating card in the middle. */
+.admin-root .login-page.auth-terminal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px clamp(28px, 6vw, 92px);
+}
+
+.admin-root .auth-terminal .auth-terminal-layout {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  width: min(1040px, 100%);
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 430px);
+  align-items: center;
+  gap: clamp(42px, 8vw, 120px);
+  margin: auto;
+}
+
+.admin-root .auth-terminal .auth-terminal-context {
+  min-width: 0;
+  padding: 0 clamp(28px, 5vw, 78px) 0 0;
+  border-right: 1px solid rgba(244, 244, 245, .12);
+}
+
+.admin-root .auth-terminal .auth-context-kicker,
+.admin-root .auth-terminal .auth-context-label,
+.admin-root .auth-terminal .auth-card-topline,
+.admin-root .auth-terminal .auth-context-readouts {
+  color: rgba(244, 244, 245, .52);
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 10px;
+  letter-spacing: .08em;
+  line-height: 1.4;
+}
+
+.admin-root .auth-terminal .auth-context-kicker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(244, 244, 245, .62);
+}
+
+.admin-root .auth-terminal .auth-context-dot {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  border-radius: 50%;
+  background: #2dd4bf;
+  box-shadow: 0 0 9px #2dd4bf;
+}
+
+.admin-root .auth-terminal .auth-context-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 34px;
+}
+
+.admin-root .auth-terminal .auth-context-brand > span {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  place-items: center;
+  color: #2dd4bf;
+  border: 1px solid rgba(45, 212, 191, .38);
+  border-radius: 9px;
+  background: rgba(45, 212, 191, .08);
+}
+
+.admin-root .auth-terminal .auth-context-brand strong,
+.admin-root .auth-terminal .auth-context-brand small {
+  display: block;
+}
+
+.admin-root .auth-terminal .auth-context-brand strong {
+  color: #f4f4f5;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -.02em;
+}
+
+.admin-root .auth-terminal .auth-context-brand small {
+  margin-top: 3px;
+  color: rgba(244, 244, 245, .48);
+  font-size: 10px;
+}
+
+.admin-root .auth-terminal .auth-context-copy {
+  max-width: 410px;
+  margin-top: clamp(58px, 10vh, 112px);
+}
+
+.admin-root .auth-terminal .auth-context-label {
+  color: #2dd4bf;
+  font-weight: 700;
+}
+
+.admin-root .auth-terminal .auth-context-copy h2 {
+  margin: 14px 0 10px;
+  color: #f4f4f5;
+  font-size: clamp(30px, 4vw, 48px);
+  font-weight: 600;
+  letter-spacing: -.045em;
+  line-height: 1.08;
+}
+
+.admin-root .auth-terminal .auth-context-copy p {
+  max-width: 360px;
+  margin: 0;
+  color: rgba(244, 244, 245, .62);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.admin-root .auth-terminal .auth-context-readouts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 420px;
+  gap: 18px;
+  margin-top: clamp(46px, 8vh, 84px);
+  padding-top: 13px;
+  border-top: 1px solid rgba(244, 244, 245, .12);
+}
+
+.admin-root .auth-terminal .auth-context-readouts div {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.admin-root .auth-terminal .auth-context-readouts strong {
+  overflow: hidden;
+  color: rgba(244, 244, 245, .86);
+  font-size: 10px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-root .auth-terminal .login-card {
+  width: 100%;
+  max-width: none;
+  max-height: calc(100dvh - 56px);
+  overflow-y: auto;
+  padding: 0 0 0 4px;
+  color: #f4f4f5;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.admin-root .auth-terminal .auth-card-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+  color: rgba(244, 244, 245, .42);
+}
+
+.admin-root .auth-terminal .auth-card-topline span:last-child {
+  color: #2dd4bf;
+}
+
+.admin-root .auth-terminal .login-card header {
+  margin: 0 0 25px;
+  text-align: left;
+}
+
+.admin-root .auth-terminal .login-card h1 {
+  font-size: 27px;
+}
+
+.admin-root .auth-terminal .security-note {
+  max-width: 370px;
+  margin: 17px 0 0;
+  color: rgba(244, 244, 245, .48);
+  text-align: left;
+}
+
+.admin-root .auth-terminal .login-actions {
+  justify-content: flex-start;
+  margin-top: 22px;
+}
+
+.admin-root .auth-terminal .home-link {
+  padding: 3px 0;
+  color: rgba(244, 244, 245, .52);
+  background: transparent;
+  border-color: transparent;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.admin-root .auth-terminal .home-link:hover,
+.admin-root .auth-terminal .home-link:focus-visible {
+  color: #f4f4f5;
+  background: transparent;
+  border-color: transparent;
+}
+
+.admin-root .auth-terminal .language-link {
+  margin-top: 17px !important;
+}
+
+.admin-root .auth-terminal .login-actions .language-link {
+  margin-top: 0 !important;
+}
+
+.admin-root .auth-terminal .language-switcher.compact .language-trigger {
+  min-height: 24px;
+  padding: 2px 0;
+  color: rgba(244, 244, 245, .52) !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  font-size: 10px;
+}
+
+.admin-root .auth-terminal .language-switcher.compact .language-trigger:hover,
+.admin-root .auth-terminal .language-switcher.compact.open .language-trigger {
+  color: #f4f4f5 !important;
+  background: transparent !important;
+}
+
+.admin-root .auth-terminal .auth-terminal-corner {
+  color: rgba(244, 244, 245, .42);
+  font-size: 11px;
+}
+
+@media (max-width: 760px) {
+  .admin-root .login-page.auth-terminal {
+    align-items: flex-start;
+    overflow: auto;
+    padding: calc(26px + env(safe-area-inset-top, 0px)) max(24px, env(safe-area-inset-right, 0px)) calc(26px + env(safe-area-inset-bottom, 0px)) max(24px, env(safe-area-inset-left, 0px));
+  }
+
+  .admin-root .auth-terminal-corner {
+    display: none;
+  }
+
+  .admin-root .auth-terminal .auth-terminal-layout {
+    width: min(520px, 100%);
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+    margin: auto;
+  }
+
+  .admin-root .auth-terminal .auth-terminal-context {
+    padding: 0 0 28px;
+    border-right: 0;
+    border-bottom: 1px solid rgba(244, 244, 245, .12);
+  }
+
+  .admin-root .auth-terminal .auth-context-brand {
+    margin-top: 25px;
+  }
+
+  .admin-root .auth-terminal .auth-context-copy {
+    margin-top: 34px;
+  }
+
+  .admin-root .auth-terminal .auth-context-copy h2 {
+    font-size: clamp(30px, 10vw, 42px);
+  }
+
+  .admin-root .auth-terminal .auth-context-readouts {
+    margin-top: 28px;
+  }
+
+  .admin-root .auth-terminal .login-card {
+    max-height: none;
+    padding: 0;
+  }
+}
+
+/* Shared appearance controls. The authenticated console and the two
+   authentication screens use the same compact moon/sun control as the public
+   homepage. */
+.admin-root .admin-topbar .theme-toggle,
+.admin-root .auth-terminal .theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  min-width: 0;
+  min-height: 0;
+  padding: 0 !important;
+  color: var(--admin-muted);
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 999px;
+  box-shadow: none !important;
+}
+
+.admin-root .theme-toggle:focus-visible {
+  outline: 2px solid var(--admin-accent);
+  outline-offset: 4px;
+}
+
+.admin-root .theme-toggle-track {
+  position: relative;
+  display: grid !important;
+  width: 46px;
+  height: 24px;
+  grid-template-columns: repeat(2, 22px);
+  align-items: center;
+  padding: 2px;
+  overflow: hidden;
+  color: var(--admin-muted);
+  background: color-mix(in srgb, var(--admin-text) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--admin-text) 22%, transparent);
+  border-radius: 999px;
+}
+
+.admin-root .theme-toggle-option {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  color: currentColor;
+  opacity: .55;
+  transition: color .16s ease, opacity .16s ease;
+}
+
+.admin-root .theme-toggle-track:not(.dark) .theme-toggle-sun,
+.admin-root .theme-toggle-track.dark .theme-toggle-moon {
+  color: var(--admin-accent);
+  opacity: 1;
+}
+
+.admin-root .theme-toggle-thumb {
+  position: absolute;
+  z-index: 0;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 18px;
+  background: currentColor;
+  border-radius: 999px;
+  opacity: .14;
+  transition: transform .2s ease, background .16s ease;
+}
+
+.admin-root .theme-toggle-track:not(.dark) .theme-toggle-thumb {
+  transform: translateX(20px);
+}
+
+.admin-root .theme-toggle-track.dark .theme-toggle-thumb {
+  background: var(--admin-accent);
+  opacity: .22;
+}
+
+/* Theme-aware terminal authentication palette. The existing admin palette is
+   reused so switching from /admin to /admin/login never changes the language
+   or the visual vocabulary underneath the controls. */
+.admin-root .login-page.auth-terminal {
+  --auth-text: var(--admin-text);
+  --auth-muted: color-mix(in srgb, var(--admin-text) 70%, var(--admin-page));
+  --auth-border: var(--admin-border);
+  --auth-surface: var(--admin-surface);
+  --auth-field: var(--admin-field);
+  --auth-accent: var(--admin-accent);
+  --auth-button-bg: var(--admin-text);
+  --auth-button-text: var(--admin-page);
+  --auth-shadow: 0 28px 64px rgba(24, 58, 52, .14), 0 6px 16px rgba(24, 58, 52, .07);
+  --auth-corner: color-mix(in srgb, var(--admin-text) 78%, var(--admin-page));
+  --auth-secondary: color-mix(in srgb, var(--admin-text) 78%, var(--admin-page));
+  --auth-ambient: radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--auth-accent) 17%, transparent), transparent 58%), linear-gradient(135deg, transparent 0 49.8%, color-mix(in srgb, var(--auth-accent) 7%, transparent) 50%, transparent 50.2%);
+  position: relative;
+  color: var(--auth-text);
+  background: var(--auth-ambient), var(--admin-page);
+  color-scheme: light;
+}
+
+:global(html[data-ws-route="admin"][data-theme="dark"] .admin-root .login-page.auth-terminal),
+:global(:root[data-ws-route="admin"][data-theme="dark"] .admin-root .login-page.auth-terminal) {
+  --auth-shadow: 0 28px 64px rgba(0, 0, 0, .52), 0 6px 16px rgba(0, 0, 0, .26);
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :global(html[data-ws-route="admin"][data-theme="system"] .admin-root .login-page.auth-terminal),
+  :global(:root[data-ws-route="admin"][data-theme="system"] .admin-root .login-page.auth-terminal) {
+    --auth-shadow: 0 28px 64px rgba(0, 0, 0, .52), 0 6px 16px rgba(0, 0, 0, .26);
+    color-scheme: dark;
+  }
+}
+
+.admin-root .auth-terminal-ambient {
+  background: var(--auth-ambient);
+  background-size: auto, 88px 88px;
+}
+
+.admin-root .auth-terminal-ambient::before {
+  position: absolute;
+  inset: -18%;
+  background: radial-gradient(circle at 18% 14%, color-mix(in srgb, var(--auth-accent) 13%, transparent), transparent 31%), radial-gradient(circle at 84% 78%, color-mix(in srgb, var(--auth-text) 8%, transparent), transparent 36%);
+  content: "";
+  opacity: .88;
+  transform: translate3d(-1.5%, -1%, 0) scale(1.02);
+  animation: auth-terminal-ambient-drift 22s ease-in-out infinite alternate;
+}
+
+.admin-root .auth-terminal-ambient::after {
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--auth-accent) 7%, transparent), transparent);
+}
+
+.admin-root .auth-terminal-corner {
+  color: var(--auth-corner);
+  font-size: 11.5px;
+}
+
+.admin-root .auth-terminal-dot,
+.admin-root .auth-terminal-cursor {
+  background: var(--auth-accent);
+}
+
+.admin-root .auth-terminal-dot {
+  box-shadow: 0 0 8px var(--auth-accent);
+}
+
+.admin-root .auth-terminal .auth-terminal-layout {
+  color: var(--auth-text);
+}
+
+.admin-root .auth-terminal .auth-terminal-context {
+  border-color: var(--auth-border);
+}
+
+.admin-root .auth-terminal .auth-context-kicker,
+.admin-root .auth-terminal .auth-context-label,
+.admin-root .auth-terminal .auth-card-topline,
+.admin-root .auth-terminal .auth-context-readouts {
+  color: var(--auth-muted);
+}
+
+.admin-root .auth-terminal .auth-context-kicker {
+  color: var(--auth-secondary);
+}
+
+.admin-root .auth-terminal .auth-context-dot {
+  background: var(--auth-accent);
+  box-shadow: 0 0 9px var(--auth-accent);
+}
+
+.admin-root .auth-terminal .auth-context-brand > span {
+  color: var(--auth-accent);
+  background: color-mix(in srgb, var(--auth-accent) 9%, transparent);
+  border-color: color-mix(in srgb, var(--auth-accent) 42%, transparent);
+}
+
+.admin-root .auth-terminal .auth-context-brand strong,
+.admin-root .auth-terminal .auth-context-copy h2 {
+  color: var(--auth-text);
+}
+
+.admin-root .auth-terminal .auth-context-brand small,
+.admin-root .auth-terminal .auth-context-copy p,
+.admin-root .auth-terminal .auth-context-readouts {
+  color: var(--auth-muted);
+}
+
+.admin-root .auth-terminal .auth-context-label,
+.admin-root .auth-terminal .auth-card-topline span:last-child {
+  color: var(--auth-accent);
+}
+
+.admin-root .auth-terminal .auth-context-readouts {
+  border-color: var(--auth-border);
+}
+
+.admin-root .auth-terminal .auth-context-readouts strong {
+  color: var(--auth-text);
+}
+
+.admin-root .auth-terminal .auth-card-topline {
+  color: var(--auth-muted);
+}
+
+.admin-root .auth-terminal .login-card {
+  color: var(--auth-text);
+  background: transparent;
+  box-shadow: none;
+}
+
+.admin-root .auth-terminal .login-card h1 {
+  color: var(--auth-text);
+}
+
+.admin-root .auth-terminal .login-card header p,
+.admin-root .auth-terminal .security-note {
+  color: var(--auth-muted);
+}
+
+.admin-root .auth-terminal .login-card label > span {
+  color: var(--auth-muted);
+}
+
+.admin-root .auth-terminal .login-card input {
+  color: var(--auth-text);
+  background: color-mix(in srgb, var(--auth-field) 88%, var(--auth-text) 12%);
+  border-color: var(--auth-border);
+  caret-color: var(--auth-accent);
+}
+
+.admin-root .auth-terminal .login-card input::placeholder {
+  color: var(--auth-muted);
+}
+
+.admin-root .auth-terminal .login-card input:focus {
+  border-color: var(--auth-border);
+  box-shadow: inset 0 -1px 0 var(--auth-accent);
+}
+
+.admin-root .auth-terminal .login-card .primary-button {
+  color: var(--auth-button-text);
+  background: var(--auth-button-bg);
+  box-shadow: none;
+}
+
+.admin-root .auth-terminal .login-card .primary-button:hover:not(:disabled) {
+  color: #fff;
+  background: var(--auth-accent);
+}
+
+.admin-root .auth-terminal .login-card .primary-button:disabled {
+  color: var(--auth-muted);
+  background: color-mix(in srgb, var(--auth-button-bg) 32%, var(--admin-page));
+}
+
+.admin-root .auth-terminal .login-card .spinner.small {
+  border-color: color-mix(in srgb, var(--auth-button-text) 30%, transparent);
+  border-top-color: var(--auth-button-text);
+}
+
+.admin-root .auth-terminal .home-link {
+  color: var(--auth-muted);
+}
+
+.admin-root .auth-terminal .home-link:hover,
+.admin-root .auth-terminal .home-link:focus-visible {
+  color: var(--auth-text);
+}
+
+.admin-root .auth-terminal .strength {
+  background: var(--auth-border);
+}
+
+.admin-root .auth-terminal .strength i {
+  background: linear-gradient(90deg, #c79a4b, var(--auth-accent));
+}
+
+.admin-root .auth-terminal-tools {
+  position: absolute;
+  z-index: 5;
+  top: 28px;
+  right: clamp(28px, 6vw, 92px);
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.admin-root .auth-terminal .auth-language-switcher {
+  color: var(--auth-muted);
+}
+
+.admin-root .auth-terminal .auth-language-switcher .language-trigger {
+  color: var(--auth-muted) !important;
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.admin-root .auth-terminal .auth-language-switcher .language-trigger:hover,
+.admin-root .auth-terminal .auth-language-switcher.open .language-trigger {
+  color: var(--auth-text) !important;
+  background: transparent !important;
+}
+
+.admin-root .auth-terminal .auth-language-switcher .language-dropdown {
+  color: var(--auth-text);
+  background: var(--auth-surface);
+  border-color: var(--auth-border);
+  box-shadow: var(--auth-shadow);
+}
+
+.admin-root .auth-terminal .auth-language-switcher .language-option {
+  color: var(--auth-text);
+}
+
+.admin-root .auth-terminal .auth-language-switcher .language-option:hover,
+.admin-root .auth-terminal .auth-language-switcher .language-option:focus-visible,
+.admin-root .auth-terminal .auth-language-switcher .language-option.selected {
+  color: var(--auth-accent);
+  background: color-mix(in srgb, var(--auth-accent) 10%, var(--auth-surface));
+  border-color: color-mix(in srgb, var(--auth-accent) 25%, var(--auth-border));
+}
+
+@keyframes auth-terminal-ambient-drift {
+  0% { transform: translate3d(-1.5%, -1%, 0) scale(1.02); }
+  100% { transform: translate3d(1.5%, 1%, 0) scale(1.06); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-root .auth-terminal-ambient::before {
+    animation: none;
+  }
+
+  .admin-root .theme-toggle-option,
+  .admin-root .theme-toggle-thumb {
+    transition: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .admin-root .auth-terminal-tools {
+    top: calc(18px + env(safe-area-inset-top, 0px));
+    right: max(24px, env(safe-area-inset-right, 0px));
+  }
+
+  .admin-root .auth-terminal .auth-terminal-layout {
+    padding-top: 42px;
+  }
+}
+
+@media (max-width: 560px) {
+  .admin-root .admin-topbar .theme-toggle {
+    width: auto;
+    height: auto;
+  }
+
+  .admin-root .admin-topbar .theme-toggle > span.theme-toggle-track {
+    display: grid !important;
+  }
+}
+
+/* The authentication shell uses the same public header/footer vocabulary as
+   the terminal homepage.  The form and the admin context remain separate,
+   but their surrounding status chrome is one shared surface. */
+.admin-root .auth-terminal-header {
+  --terminal-text: var(--auth-text);
+  --terminal-muted: var(--auth-muted);
+  --terminal-accent: var(--auth-accent);
+  position: absolute;
+  z-index: 5;
+  top: 28px;
+  right: 48px;
+  left: 48px;
+  color: var(--auth-text);
+}
+
+.admin-root .auth-terminal-header :deep(.join-header) {
+  width: 100%;
+  min-height: 34px;
+  color: var(--auth-text);
+}
+
+.admin-root .auth-terminal-header :deep(.brand-mark) {
+  display: none;
+}
+
+.admin-root .auth-terminal-header :deep(.brand-lockup) {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.admin-root .auth-terminal-header :deep(.brand-lockup strong) {
+  color: var(--auth-text);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.admin-root .auth-terminal-header :deep(.brand-lockup small) {
+  display: inline;
+  margin: 0;
+  color: var(--auth-muted);
+  font-size: 9px;
+  letter-spacing: .02em;
+}
+
+.admin-root .auth-terminal-header :deep(.header-tools) {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.admin-root .auth-terminal-header :deep(.github-link) {
+  color: var(--auth-muted);
+  font-size: 10px;
+}
+
+.admin-root .auth-terminal-header :deep(.github-link:hover),
+.admin-root .auth-terminal-header :deep(.github-link:focus-visible) {
+  color: var(--auth-text);
+}
+
+.admin-root .auth-terminal-header :deep(.theme-toggle) {
+  color: var(--auth-muted);
+}
+
+.admin-root .auth-terminal-header :deep(.theme-toggle-track) {
+  color: var(--auth-muted);
+  background: color-mix(in srgb, var(--auth-text) 9%, transparent);
+  border-color: color-mix(in srgb, var(--auth-text) 28%, transparent);
+}
+
+.admin-root .auth-terminal-header :deep(.theme-toggle-track:not(.dark) .theme-toggle-sun),
+.admin-root .auth-terminal-header :deep(.theme-toggle-track.dark .theme-toggle-moon) {
+  color: var(--auth-accent);
+}
+
+.admin-root .auth-terminal-header :deep(.theme-toggle-track.dark .theme-toggle-thumb) {
+  background: var(--auth-accent);
+}
+
+.admin-root .auth-terminal-header :deep(.language-trigger) {
+  min-height: 24px;
+  padding-inline: 0;
+  color: var(--auth-muted) !important;
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.admin-root .auth-terminal-header :deep(.language-trigger:hover),
+.admin-root .auth-terminal-header :deep(.language-switcher.open .language-trigger) {
+  color: var(--auth-text) !important;
+  background: transparent !important;
+}
+
+.admin-root .auth-terminal-header :deep(.language-dropdown) {
+  color: var(--auth-text);
+  background: var(--auth-surface);
+  border-color: var(--auth-border);
+  box-shadow: var(--auth-shadow);
+}
+
+.admin-root .auth-terminal-header :deep(.language-option) {
+  color: var(--auth-text);
+}
+
+.admin-root .auth-terminal-header :deep(.language-option:hover),
+.admin-root .auth-terminal-header :deep(.language-option:focus-visible),
+.admin-root .auth-terminal-header :deep(.language-option.selected) {
+  color: var(--auth-accent);
+  background: color-mix(in srgb, var(--auth-accent) 12%, var(--auth-surface));
+  border-color: color-mix(in srgb, var(--auth-accent) 28%, var(--auth-border));
+}
+
+.admin-root .auth-terminal-footer {
+  position: absolute;
+  z-index: 3;
+  right: 48px;
+  bottom: 28px;
+  left: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  color: var(--auth-muted);
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 9px;
+  letter-spacing: .025em;
+}
+
+.admin-root .auth-terminal-footer-left,
+.admin-root .auth-terminal-footer-right {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-root .auth-terminal-footer-left > span,
+.admin-root .auth-terminal-footer-right > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-root .auth-terminal-footer-separator {
+  color: color-mix(in srgb, var(--auth-text) 34%, transparent);
+}
+
+.admin-root .auth-terminal-footer-accent {
+  color: var(--auth-accent);
+}
+
+.admin-root .auth-terminal .login-card .auth-card-topline,
+.admin-root .auth-terminal .login-card header p,
+.admin-root .auth-terminal .login-card label > span,
+.admin-root .auth-terminal .security-note {
+  color: var(--auth-muted);
+}
+
+.admin-root .auth-terminal .login-card h1,
+.admin-root .auth-terminal .login-card input {
+  color: var(--auth-text);
+}
+
+@media (max-width: 760px) {
+  .admin-root .login-page.auth-terminal {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-root .auth-terminal-header {
+    top: calc(18px + env(safe-area-inset-top, 0px));
+    right: max(24px, env(safe-area-inset-right, 0px));
+    left: max(24px, env(safe-area-inset-left, 0px));
+  }
+
+  .admin-root .auth-terminal-header :deep(.github-link) {
+    display: none;
+  }
+
+  .admin-root .auth-terminal-footer {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    width: min(520px, 100%);
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+    margin: 32px auto 0;
+    padding-bottom: calc(4px + env(safe-area-inset-bottom, 0px));
+    font-size: 8px;
+  }
+
+  .admin-root .auth-terminal-footer-left,
+  .admin-root .auth-terminal-footer-right {
+    width: 100%;
+    gap: 6px;
+  }
+
+  .admin-root .auth-terminal-footer-right {
+    justify-content: flex-end;
+  }
+}
+
+/* The four terminal readouts are intentionally stronger than the header and
+   footer metadata. Keep explicit colors here instead of relying only on
+   color-mix(), so the light palette remains readable in browsers that do not
+   resolve a mixed custom property in a descendant. */
+.admin-root .auth-terminal-corner {
+  color: #3f5d56 !important;
+  font-weight: 600;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .72);
+}
+
+.admin-root .auth-terminal-dot,
+.admin-root .auth-terminal-cursor {
+  background: #087d74 !important;
+  box-shadow: 0 0 8px rgba(8, 125, 116, .55);
+}
+
+:global(html[data-ws-route="admin"][data-theme="dark"] .admin-root .auth-terminal-corner),
+:global(:root[data-ws-route="admin"][data-theme="dark"] .admin-root .auth-terminal-corner) {
+  color: #b8ddd5 !important;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .42);
+}
+
+:global(html[data-ws-route="admin"][data-theme="dark"] .admin-root .auth-terminal-dot),
+:global(html[data-ws-route="admin"][data-theme="dark"] .admin-root .auth-terminal-cursor),
+:global(:root[data-ws-route="admin"][data-theme="dark"] .admin-root .auth-terminal-dot),
+:global(:root[data-ws-route="admin"][data-theme="dark"] .admin-root .auth-terminal-cursor) {
+  background: #79ddd1 !important;
+  box-shadow: 0 0 9px rgba(121, 221, 209, .72);
+}
+
+@media (prefers-color-scheme: dark) {
+  :global(html[data-ws-route="admin"][data-theme="system"] .admin-root .auth-terminal-corner),
+  :global(:root[data-ws-route="admin"][data-theme="system"] .admin-root .auth-terminal-corner) {
+    color: #b8ddd5 !important;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, .42);
+  }
+
+  :global(html[data-ws-route="admin"][data-theme="system"] .admin-root .auth-terminal-dot),
+  :global(html[data-ws-route="admin"][data-theme="system"] .admin-root .auth-terminal-cursor),
+  :global(:root[data-ws-route="admin"][data-theme="system"] .admin-root .auth-terminal-dot),
+  :global(:root[data-ws-route="admin"][data-theme="system"] .admin-root .auth-terminal-cursor) {
+    background: #79ddd1 !important;
+    box-shadow: 0 0 9px rgba(121, 221, 209, .72);
+  }
+}
