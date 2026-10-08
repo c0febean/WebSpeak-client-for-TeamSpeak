@@ -1,7 +1,12 @@
-import { RnnoiseWorkletNode, loadRnnoise } from "@sapphi-red/web-noise-suppressor";
 import rnnoiseSimdWasmUrl from "@sapphi-red/web-noise-suppressor/rnnoise_simd.wasm?url";
 import rnnoiseWasmUrl from "@sapphi-red/web-noise-suppressor/rnnoise.wasm?url";
 import rnnoiseWorkletUrl from "@sapphi-red/web-noise-suppressor/rnnoiseWorklet.js?url";
+
+interface RnnoiseWorkletNodeLike extends AudioWorkletNode {
+  destroy(): void;
+}
+
+type NoiseSuppressorModule = typeof import("@sapphi-red/web-noise-suppressor");
 
 export interface MicrophoneProcessingSettings {
   echoCancellation: boolean | null;
@@ -34,6 +39,19 @@ interface CaptureOptions {
 export function createMicrophoneCaptureFactory() {
   const modules = new WeakMap<AudioContext, Map<string, Promise<void>>>();
   let wasmPromise: Promise<ArrayBuffer> | null = null;
+  let noiseSuppressorPromise: Promise<NoiseSuppressorModule> | null = null;
+  function loadNoiseSuppressor(): Promise<NoiseSuppressorModule> {
+    // The package defines classes extending AudioWorkletNode at module scope.
+    // Do not evaluate it until the browser has exposed AudioWorkletNode; this
+    // keeps the public page usable over HTTP where the API may be unavailable.
+    if (!noiseSuppressorPromise) {
+      noiseSuppressorPromise = import("@sapphi-red/web-noise-suppressor").catch(error => {
+        noiseSuppressorPromise = null;
+        throw error;
+      });
+    }
+    return noiseSuppressorPromise;
+  }
   function loadModule(ctx: AudioContext, url: string): Promise<void> {
     let cache = modules.get(ctx);
     if (!cache) { cache = new Map(); modules.set(ctx, cache); }
@@ -52,7 +70,7 @@ export function createMicrophoneCaptureFactory() {
   async function prepare(options: CaptureOptions): Promise<MicrophoneCapture> {
     const { context: ctx, stream, assertCurrent } = options;
     let source: MediaStreamAudioSourceNode | null = null;
-    let denoiser: RnnoiseWorkletNode | null = null;
+    let denoiser: RnnoiseWorkletNodeLike | null = null;
     let destination: MediaStreamAudioDestinationNode | null = null;
     let gain: GainNode | null = null;
     let silent: GainNode | null = null;
@@ -94,13 +112,14 @@ export function createMicrophoneCaptureFactory() {
       const supportsWorklet = typeof AudioWorkletNode !== "undefined" && Boolean(ctx.audioWorklet);
       if (options.noiseSuppression && supportsWorklet) {
         try {
-          if (!wasmPromise) wasmPromise = loadRnnoise({ url: rnnoiseWasmUrl, simdUrl: rnnoiseSimdWasmUrl }).catch(error => {
+          const noiseSuppressor = await loadNoiseSuppressor();
+          if (!wasmPromise) wasmPromise = noiseSuppressor.loadRnnoise({ url: rnnoiseWasmUrl, simdUrl: rnnoiseSimdWasmUrl }).catch(error => {
             wasmPromise = null;
             throw error;
           });
           const [wasmBinary] = await Promise.all([wasmPromise, loadModule(ctx, rnnoiseWorkletUrl)]);
           assertCurrent();
-          denoiser = new RnnoiseWorkletNode(ctx, { maxChannels: 1, wasmBinary });
+          denoiser = new noiseSuppressor.RnnoiseWorkletNode(ctx, { maxChannels: 1, wasmBinary });
         } catch {
           assertCurrent(); // RNNoise is optional; cancellation is not a fallback.
         }
