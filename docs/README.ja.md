@@ -10,12 +10,6 @@
 | **WHY** | デスクトップクライアントをインストールせず、ブラウザからチャンネルに参加できます。運用者はサーバーとデータを管理できます。 |
 | **HOW** | 起動後、管理コンソールで TeamSpeak の接続先とアクセス方針を設定します。ブラウザが画面と音声を担当し、WebSpeak がゲートウェイとして接続します。 |
 
-## オンラインデモ
-
-アドレス: <https://webspeak.example.invalid>
-
-デモは香港にあります。ネットワークと負荷が不安定な場合があるため、遅延、切断、一時的な利用不可は各自の環境での動作を示すものではありません。
-
 ## ✨ 機能
 
 | 機能 | 説明 |
@@ -126,12 +120,6 @@ npm start
 - IPv6 にはルーティング可能な IPv6、OS/コンテナで有効な IPv6、適切なファイアウォール設定が必要です。リテラルは `[2001:db8::1]#9987` の形式です。
 - 保存したブラウザ ID は同じブラウザで同時に1接続だけ使用できます。
 - BGM共有はデスクトップのみで、WebRTC が必要です。
-
-## コミュニティと関連プロジェクト
-
-- [QQ グループ](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=yhumUMDD9PmyYFWdXWUb_x7hM5trFQY8&authKey=Pw3HBGT7GwMinTQnuFGfnpf0aRSzXOJKcAiujVP1%2BXMpjheAKrncTRivicBJxpjV&noverify=0&group_code=869500475)
-- [Telegram グループ](https://t.me/+8qShpTcuN9A3MWY9)
-- [NeteaseTSBot](https://github.com/yichen11818/NeteaseTSBot) — Web コンソール付き TeamSpeak 音楽ボット。
 
 ## 🧾 更新履歴
 

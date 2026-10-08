@@ -28,7 +28,7 @@
       >
       <a
         class="github-button"
-        href="https://github.com/EchoSixHIYA/WebSpeak-client-for-TeamSpeak"
+        href="https://github.com/c0febean/WebSpeak-client-for-TeamSpeak"
         target="_blank"
         rel="noreferrer"
         :title="t('githubRepository')"
@@ -39,61 +39,12 @@
           :size="18"
         /><span>{{ t("githubRepository") }}</span>
       </a>
-      <button
-        type="button"
-        class="qq-button"
-        :title="t('qqGroup')"
-        :aria-label="t('qqGroup')"
-        aria-haspopup="dialog"
-        @click="emit('openQq')"
-      >
-        <Icon
-          name="qq"
-          :size="18"
-        /><span class="qq-label">{{ t("qqGroup") }}</span>
-      </button>
-      <a
-        class="bilibili-button"
-        href="https://space.bilibili.com/25414873"
-        target="_blank"
-        rel="noreferrer"
-        :title="t('bilibiliProfile')"
-        :aria-label="t('bilibiliProfile')"
-      >
-        <span class="bilibili-glyph">B</span
-        ><span class="bilibili-label">{{ t("bilibiliProfile") }}</span>
-      </a>
       <span
         class="version-badge"
         :title="`${t('currentVersion')}: v${appVersion}`"
         :aria-label="`${t('currentVersion')}: v${appVersion}`"
         >v{{ appVersion }}</span
       >
-      <a
-        class="changelog-button"
-        href="https://github.com/EchoSixHIYA/WebSpeak-client-for-TeamSpeak/blob/master/CHANGELOG.md"
-        target="_blank"
-        rel="noreferrer"
-        :title="t('viewChangelog')"
-        :aria-label="t('viewChangelog')"
-      >
-        <Icon
-          name="clock"
-          :size="16"
-        /><span>{{ t("viewChangelog") }}</span>
-      </a>
-      <a
-        v-if="!mobile"
-        class="guide-button"
-        href="/admin"
-        :title="t('adminConsole')"
-        :aria-label="t('adminConsole')"
-      >
-        <Icon
-          name="settings"
-          :size="15"
-        /><span>{{ t("adminConsole") }}</span>
-      </a>
       <SkinSwitcher
         v-model="skinId"
         class="join-skin-switcher"
@@ -120,14 +71,12 @@ import type { Language } from "../../i18n/web-client.js";
 defineProps<{
   brandName: string;
   appVersion: string;
-  mobile: boolean;
   skinOptions: SkinOption[];
   t: (key: string, variables?: Record<string, string | number>) => string;
 }>();
 const language = defineModel<Language>("language", { required: true });
 const skinId = defineModel<string>("skinId", { required: true });
 const emit = defineEmits<{
-  openQq: [];
   skinChange: [value: string];
   languageChange: [];
 }>();
