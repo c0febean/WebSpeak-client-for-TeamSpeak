@@ -82,6 +82,7 @@
     <div
       v-else
       :class="['app-shell', `mobile-view-${mobileSection}`]"
+      :data-ws-state="voiceState.reconnectFailed ? 'error' : voiceState.reconnecting ? 'reconnecting' : voiceState.audioNotice ? 'degraded' : 'connected'"
       :data-performance-open="performancePanelOpen ? 'true' : 'false'"
       data-ws-part="voice.shell"
       @click="memberMenu = null"
@@ -143,13 +144,25 @@
                 name="settings"
                 :size="18"
             /></button>
-            <SkinSwitcher
-              v-model="activeSkinId"
-              class="workspace-skin-switcher"
-              :menu-label="t('skinSelector')"
-              :options="skinOptions"
-              @change="onSkinChange"
-            />
+            <button
+              type="button"
+              class="theme-toggle voice-theme-toggle"
+              data-ws-part="control"
+              :aria-label="isDarkTheme(themeMode) ? t('switchToLightTheme') : t('switchToDarkTheme')"
+              :title="isDarkTheme(themeMode) ? t('switchToLightTheme') : t('switchToDarkTheme')"
+              :aria-pressed="isDarkTheme(themeMode)"
+              @click="toggleHomeTheme"
+            >
+              <span
+                class="theme-toggle-track"
+                :class="{ dark: isDarkTheme(themeMode) }"
+                aria-hidden="true"
+              >
+                <span class="theme-toggle-option theme-toggle-moon"><Icon name="moon" :size="12" /></span>
+                <span class="theme-toggle-option theme-toggle-sun"><Icon name="sun" :size="12" /></span>
+                <span class="theme-toggle-thumb"></span>
+              </span>
+            </button>
             <LanguageSwitcher
               v-model="language"
               class="workspace-language"
@@ -405,13 +418,6 @@
           />
           {{ t("audioSettings") }}</button
         >
-        <SkinSwitcher
-          v-model="activeSkinId"
-          class="mobile-skin-switcher"
-          :menu-label="t('skinSelector')"
-          :options="skinOptions"
-          @change="onSkinChange"
-        />
         <div class="language-menu-row"
           ><Icon
             name="globe"
@@ -561,7 +567,6 @@ import IdentityImportDialog from "../components/web-client/IdentityImportDialog.
 import { usePublicSkin } from "../composables/usePublicSkin.js";
 import { useWebClientIdentity } from "../composables/useWebClientIdentity.js";
 import LanguageSwitcher from "../components/LanguageSwitcher.vue";
-import SkinSwitcher, { type SkinOption } from "../components/SkinSwitcher.vue";
 import { useWebClientChat } from "../composables/useWebClientChat.js";
 import { useWebClientAudioControls } from "../composables/useWebClientAudioControls.js";
 import { useWebClientChannels, type TreeChannel } from "../composables/useWebClientChannels.js";
@@ -576,7 +581,6 @@ import { useWebClientServerHistory } from "../composables/useWebClientServerHist
 import { getInitialLanguage, type Language } from "../i18n/web-client.js";
 import { clearLocalData as clearStoredLocalData, isLocalPersistenceAvailable, loadLocalPreferences, loadStoredIdentity, removeStoredIdentity, saveLocalPreferences, saveStoredIdentity } from "../services/local-persistence.js";
 import type { InstalledSkin, SkinHomeCopy } from "../services/skin-pack.js";
-import { isPublicSkinEnabled } from "../services/skin-catalog.js";
 import { BUILTIN_DARK_SKIN, BUILTIN_LIGHT_SKIN } from "../services/skin-runtime.js";
 import { applyTheme, getStoredTheme, isDarkTheme, type ThemeMode } from "../services/theme.js";
 import { createScreenWakeLockController, getScreenWakeLockApi, type ScreenWakeLockController, type ScreenWakeLockSnapshot } from "../services/screen-wake-lock.js";
@@ -750,15 +754,7 @@ function getInitialTheme(): ThemeMode {
 const themeMode = ref<ThemeMode>(getInitialTheme());
 applyTheme(themeMode.value);
 const publicSkin = usePublicSkin({ activeSkin, themeMode, appVersion: () => appVersion.value });
-const { activeSkinId, skinReady, installedSkins, catalogSkins, select: onSkinChange, initialize: initializeSkin } = publicSkin;
-const skinOptions = computed<SkinOption[]>(() => [
-  ...catalogSkins.value.map((skin) => ({
-    value: skin.id,
-    label: skin.id === BUILTIN_LIGHT_SKIN ? t("skinDay") : skin.id === BUILTIN_DARK_SKIN ? t("skinNight") : skin.id === "community.illusia-voice" ? t("skinIllusia") : skin.name,
-    icon: skin.id === BUILTIN_LIGHT_SKIN ? "sun" : skin.id === BUILTIN_DARK_SKIN ? "moon" : "compass",
-  })),
-  ...installedSkins.value.filter((skin) => !catalogSkins.value.some((item) => item.id === skin.id) && isPublicSkinEnabled(skin.id)).map((skin) => ({ value: skin.id, label: skin.name, icon: "compass" })),
-]);
+const { skinReady, select: onSkinChange, initialize: initializeSkin } = publicSkin;
 const skinHomeCopy = computed<SkinHomeCopy>(() => resolveSkinHomeCopy(activeSkin.value, language.value));
 
 function toggleHomeTheme(): void {

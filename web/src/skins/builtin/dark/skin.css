@@ -1,16 +1,17 @@
 /* Built-in package: builtin.dark. Scoped to public WebSpeak pages only. */
 .ws-skin-root[data-ws-skin="builtin.dark"] {
   color-scheme: dark;
-  --ws-page-bg: #101918;
-  --ws-surface-1: #172321;
-  --ws-surface-2: #202f2c;
-  --ws-text: #e8f3f0;
-  --ws-text-muted: #9bb0aa;
-  --ws-accent: #69d2c7;
-  --ws-success: #78e489;
-  --ws-warning: #e2b36c;
-  --ws-danger: #ee8a82;
-  --ws-border: #30413d;
+  --ws-page-bg: #0b0c0e;
+  --ws-surface-1: #141619;
+  --ws-surface-2: #1c1f24;
+  --ws-text: #f4f4f5;
+  --ws-text-muted: #a0a0a9;
+  --ws-accent: #2dd4bf;
+  --ws-success: #2dd4bf;
+  --ws-warning: #d8b66d;
+  --ws-danger: #f87171;
+  --ws-border: rgba(255, 255, 255, .08);
+  --ws-border-strong: rgba(255, 255, 255, .14);
   --surface-0: var(--ws-page-bg);
   --surface-1: var(--ws-surface-1);
   --surface-2: var(--ws-surface-2);
