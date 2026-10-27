@@ -1,0 +1,84 @@
+{
+  "key": "webspeak",
+  "name": "WebSpeak",
+  "title": "WebSpeak",
+  "version": "0.1.0-upstream.0.2.6",
+  "description": {
+    "en": "Self-hosted browser client and voice gateway for TeamSpeak 3 and TeamSpeak 6",
+    "zh": "可自行部署的 TeamSpeak 3 和 TeamSpeak 6 网页客户端与语音网关"
+  },
+  "readme": {
+    "zh": {
+      "introduction": "是可自行部署的 TeamSpeak 3 和 TeamSpeak 6 网页客户端与语音网关。访客可以通过浏览器加入频道，管理员可以管理目标服务器和访问策略。",
+      "features": [
+        {
+          "title": "浏览器语音",
+          "description": "支持 Opus 语音和可选的 WebRTC 低延迟传输。"
+        },
+        {
+          "title": "管理控制台",
+          "description": "管理服务器、访问策略、邀请链接和运行状态。"
+        }
+      ]
+    },
+    "en": {
+      "introduction": "is a self-hosted browser client and voice gateway for TeamSpeak 3 and TeamSpeak 6. Visitors can join channels in a browser, while administrators manage target servers and access policy.",
+      "features": [
+        {
+          "title": "Browser voice",
+          "description": "Supports Opus audio and optional low-latency WebRTC transport."
+        },
+        {
+          "title": "Administration",
+          "description": "Manage servers, access policy, invite links, and runtime state."
+        }
+      ]
+    }
+  },
+  "type": "website",
+  "tags": ["Tool"],
+  "website": "https://github.com/c0febean/WebSpeak-client-for-TeamSpeak",
+  "github": "https://github.com/c0febean/WebSpeak-client-for-TeamSpeak",
+  "document": "https://github.com/c0febean/WebSpeak-client-for-TeamSpeak/blob/master/docs/README.zh-CN.md",
+  "source_evidence": [
+    "https://github.com/c0febean/WebSpeak-client-for-TeamSpeak/blob/master/Dockerfile",
+    "https://github.com/c0febean/WebSpeak-client-for-TeamSpeak/blob/master/docker-compose.yml",
+    "https://github.com/c0febean/WebSpeak-client-for-TeamSpeak/blob/master/docs/README.zh-CN.md",
+    "https://github.com/c0febean/WebSpeak-client-for-TeamSpeak/blob/master/src/server/webrtc-config.ts",
+    "https://github.com/c0febean/WebSpeak-client-for-TeamSpeak/blob/master/.github/workflows/docker-publish.yml"
+  ],
+  "init_source_evidence": [
+    "https://github.com/c0febean/WebSpeak-client-for-TeamSpeak/blob/master/Dockerfile (USER node, /data volume)",
+    "https://github.com/nodejs/docker-node/blob/main/22/bookworm-slim/Dockerfile (node UID/GID 1000:1000)"
+  ],
+  "notes": [
+    "The 1Panel bridge-network package maps the default WebRTC UDP range 40000-40099. Keep the admin-console range aligned with the Compose mapping.",
+    "The local package references the fork's GHCR image, not the upstream image. The image is published by docker-publish.yml after CI succeeds.",
+    "For a TeamSpeak server on the same host, use host.docker.internal or a reachable host address as its target."
+  ],
+  "architectures": ["amd64", "arm64"],
+  "logo": "web/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png",
+  "services": [
+    {
+      "name": "webspeak",
+      "image": "ghcr.io/c0febean/webspeak:0.1.0-upstream.0.2.6",
+      "primary": true,
+      "ports": [
+        {
+          "host_env": "PANEL_APP_PORT_HTTP",
+          "host_default": 3040,
+          "container": 3040,
+          "protocol": "tcp",
+          "label": "Web UI Port"
+        }
+      ],
+      "volumes": ["./data:/data"],
+      "volume_permissions": [
+        {
+          "path": "./data",
+          "owner": "1000:1000"
+        }
+      ]
+    }
+  ]
+}

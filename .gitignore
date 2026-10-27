@@ -14,6 +14,7 @@ config.json
 .env
 # Local deployment/download artifacts (see docs/LOCAL_ARTIFACTS.zh-CN.md).
 /release-artifacts/
+/apps/
 /webspeak-deploy*.tar.gz
 /webspeak-update*.tar.gz
 /teamspeak6-server-linux-amd64.tar.xz

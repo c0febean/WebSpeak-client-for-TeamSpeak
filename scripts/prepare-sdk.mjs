@@ -19,7 +19,9 @@ const temporaryRoot = mkdtempSync(join(tmpdir(), "webspeak-sdk-build-"));
 const destination = join(root, "node_modules", "@echosixhiya", "teamspeak-client", "dist");
 
 try {
-  execFileSync("git", ["clone", "--no-checkout", repository, temporaryRoot], { stdio: "inherit" });
+  // Fetch the pinned commit directly: it may no longer be reachable from a branch.
+  execFileSync("git", ["init", "--quiet", temporaryRoot], { stdio: "inherit" });
+  execFileSync("git", ["fetch", "--depth=1", repository, commit], { cwd: temporaryRoot, stdio: "inherit" });
   execFileSync("git", ["checkout", "--detach", commit], { cwd: temporaryRoot, stdio: "inherit" });
   const npmOptions = { cwd: temporaryRoot, stdio: "inherit" };
   const runNpm = (args) => {
